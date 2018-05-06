@@ -8,6 +8,8 @@
 extern connect_hook_fn_t 	original_connect;
 extern recvfrom_hook_fn_t 	original_recvfrom;
 extern sendto_hook_fn_t 	original_sendto;
+extern shutdown_hook_fn_t	original_shutdown;
+extern close_hook_fn_t		original_close;
 
 long TcpInspection_connect_hook(
 	int sockfd,
@@ -49,4 +51,25 @@ long TcpInspection_sendto_hook(
 	}
 
 	return original_sendto(sockfd, buf, len, flags, dest_addr, addrlen);
+}
+
+long TcpInspection_shutdown_hook(
+	int sockfd,
+	int how)
+{
+	if (strcmp(current->comm, "curl") == 0) {
+		LOG("called shutdown %d %d", sockfd, how);
+	}
+
+	return original_shutdown(sockfd, how);
+}
+
+long TcpInspection_close_hook(
+	unsigned int fd)
+{
+	if (strcmp(current->comm, "curl") == 0) {
+		LOG("called close hook %u", fd);
+	}
+
+	return original_close(fd);
 }

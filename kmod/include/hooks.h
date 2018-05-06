@@ -53,4 +53,22 @@ long TcpInspection_sendto_hook(
 	int
 );
 
+// shutdown hook
+typedef long (*shutdown_hook_fn_t)(
+	int,
+	int
+);
+long TcpInspection_shutdown_hook(
+	int,
+	int
+);
+
+// close hook
+typedef long (*close_hook_fn_t)(
+	unsigned int
+);
+long TcpInspection_close_hook(
+	unsigned int
+);
+
 #endif

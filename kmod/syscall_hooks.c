@@ -13,6 +13,8 @@
 connect_hook_fn_t 	original_connect 	= NULL;
 recvfrom_hook_fn_t 	original_recvfrom	= NULL;
 sendto_hook_fn_t 	original_sendto		= NULL;
+shutdown_hook_fn_t	original_shutdown	= NULL;
+close_hook_fn_t 	original_close		= NULL;
 
 #define SET_HOOK(fn_t, addr, hookId, hookFn, hookBackup) 						\
 	hookBackup = (fn_t)((unsigned long*) addr)[hookId]; 						\
@@ -95,6 +97,22 @@ int TcpInspection_set_hooks(void)
 	}
 
 	SET_HOOK(
+		close_hook_fn_t,
+		addr,
+		__NR_close,
+		TcpInspection_close_hook,
+		original_close
+	);
+
+	SET_HOOK(
+		shutdown_hook_fn_t,
+		addr,
+		__NR_shutdown,
+		TcpInspection_shutdown_hook,
+		original_shutdown
+	);
+
+	SET_HOOK(
 		sendto_hook_fn_t,
 		addr,
 		__NR_sendto,
@@ -144,6 +162,8 @@ void TcpInspection_remove_hooks(void)
 		return;
 	}
 
+	UNSET_HOOK(addr, __NR_close, original_close);
+	UNSET_HOOK(addr, __NR_shutdown, original_shutdown);
 	UNSET_HOOK(addr, __NR_sendto, original_sendto);
 	UNSET_HOOK(addr, __NR_recvfrom, original_recvfrom);
 	UNSET_HOOK(addr, __NR_connect, original_connect);
