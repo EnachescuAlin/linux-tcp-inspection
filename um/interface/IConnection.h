@@ -3,29 +3,11 @@
 
 #include <cstdint>
 
+#include "Structs.h"
 #include "IConnectionMgr.h"
 
-namespace TcpConnection
+namespace TcpInspection
 {
-
-enum DataVerdict : uint32_t
-{
-	block,
-	allow,
-	drop
-};
-
-enum DataFlags : uint32_t
-{
-	normal,
-	reinjected
-};
-
-enum Direction : uint32_t
-{
-	in,
-	out
-};
 
 class IConnection
 {
@@ -65,6 +47,6 @@ private:
 	IConnectionMgr *m_connMgr = nullptr;
 };
 
-} // end TcpConnection namespace
+} // end TcpInspection namespace
 
 #endif

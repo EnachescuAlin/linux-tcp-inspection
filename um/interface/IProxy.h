@@ -9,13 +9,6 @@
 namespace TcpInspection
 {
 
-enum ConnectionVerdict : uint32_t
-{
-	filter,
-	unfilter,
-	drop
-};
-
 class IProxy
 {
 public:
@@ -32,7 +25,9 @@ public:
 		IConnection **conn
 	) = 0;
 
-	virtual void OnDestroyConnection() = 0;
+	virtual void OnDestroyConnection(
+		IConnection *conn
+	) = 0;
 };
 
 } // end TcpInspection namespace
