@@ -14,6 +14,6 @@ enum Error : uint32_t
 	proxyNotFound
 };
 
-}
+} // end TcpInspection namespace
 
 #endif
