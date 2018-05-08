@@ -10,7 +10,8 @@ enum DataVerdict : uint32_t
 {
 	block,
 	allow,
-	drop
+	dropData,
+	closeConnection
 };
 
 enum DataFlags : uint32_t
@@ -29,7 +30,7 @@ enum ConnectionVerdict : uint32_t
 {
 	filter,
 	unfilter,
-	drop
+	dropConnection
 };
 
 struct Ipv4Address
