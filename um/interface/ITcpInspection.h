@@ -29,8 +29,15 @@ public:
 
 } // end TcpInspection namespace
 
+extern "C"
+{
+
 TcpInspection::Error GetInterface(int version, void **interface);
+typedef TcpInspection::Error (*GetInterfacePfn)(int, void**);
 
 void ReleaseInterface(void *interface);
+typedef void (*ReleaseInterfacePfn)(void*);
+
+}
 
 #endif
