@@ -5,6 +5,7 @@
 
 #include "IConnectionMgr.h"
 #include "IConnection.h"
+#include "Structs.h"
 
 namespace TcpInspection
 {
@@ -21,7 +22,7 @@ public:
 	virtual uint32_t GetPriority() const = 0;
 
 	virtual ConnectionVerdict OnNewConnection(
-		const IConnectionMgr *connMgr,
+		IConnectionMgr *connMgr,
 		IConnection **conn
 	) = 0;
 
