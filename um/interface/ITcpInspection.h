@@ -24,7 +24,7 @@ public:
 
 	virtual Error UnregisterProxy(
 		const IProxy *proxy
-	);
+	) = 0;
 };
 
 } // end TcpInspection namespace
