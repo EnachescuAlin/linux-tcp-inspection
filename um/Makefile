@@ -1,19 +1,29 @@
 CXX = g++
 CPPINCLUDE = -I./include -I./interface
 CPPFLAGS = -std=c++1z -fPIC
-LDFLAGS = -shared
+LDFLAGS = -shared -rdynamic
 
-SRCS = src/main.cpp
-OBJS = bin/main.o
+OBJS = bin/main.o bin/TcpInspection.o bin/Proxy.o bin/Proxies.o
 
-all: bin/TcpInspection.so
+all: dir bin/TcpInspection.so
+
+dir:
+	mkdir -p bin
 
 bin/TcpInspection.so: $(OBJS)
-	$(CXX) $(LDFLAGS) -o bin/TcpInspection.so $(OBJS)
+	$(CXX) $(LDFLAGS) -o bin/TcpInspection.so $(OBJS) -lpthread
 
-$(OBJS): $(SRCS)
-	mkdir -p bin
-	$(CXX) $(CPPFLAGS) $(CPPINCLUDE) -c $(SRCS) -o $(OBJS)
+bin/main.o: src/main.cpp
+	$(CXX) $(CPPFLAGS) $(CPPINCLUDE) -c $< -o $@
+
+bin/TcpInspection.o: src/TcpInspection.cpp
+	$(CXX) $(CPPFLAGS) $(CPPINCLUDE) -c $< -o $@
+
+bin/Proxy.o: src/Proxy.cpp
+	$(CXX) $(CPPFLAGS) $(CPPINCLUDE) -c $< -o $@
+
+bin/Proxies.o: src/Proxies.cpp
+	$(CXX) $(CPPFLAGS) $(CPPINCLUDE) -c $< -o $@
 
 clean:
 	rm -f $(OBJS) bin/TcpInspection.so
