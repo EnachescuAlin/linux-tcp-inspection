@@ -127,7 +127,7 @@ int main()
 	cout << "type 'q' to exit" << endl;
 
 	char c;
-	while (false) {
+	while (true) {
 		cin >> c;
 		if (c == 'q') {
 			break;
