@@ -11,7 +11,12 @@ enum Error : uint32_t
 	success,
 	nullPointer,
 	proxyAlreadyRegistered,
-	proxyNotFound
+	proxyNotFound,
+	outOfMemory,
+	invalidState,
+	priorityAlreadyExists,
+	invalidVersion,
+	invalidParameter
 };
 
 } // end TcpInspection namespace
