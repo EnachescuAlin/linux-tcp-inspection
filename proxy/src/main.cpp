@@ -34,11 +34,12 @@ public:
 	}
 
 	void OnDisconnect(
-		TcpInspection::Direction direction
+		TcpInspection::Direction direction,
+		TcpInspection::DisconnectFlags flags
 	) override
 	{
-		printf("on disconnect => conn id [%lu], direction [%u]",
-			GetConnectionMgr()->GetConnectionId(), direction
+		printf("on disconnect => conn id [%lu], direction [%u], flags[%u]",
+			GetConnectionMgr()->GetConnectionId(), direction, flags
 		);
 	}
 };
