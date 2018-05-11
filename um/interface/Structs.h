@@ -20,6 +20,12 @@ enum DataFlags : uint32_t
 	reinjected
 };
 
+enum DisconnectFlags : uint32_t
+{
+	normalDisconnect,
+	closed
+};
+
 enum Direction : uint32_t
 {
 	in,

@@ -40,7 +40,8 @@ public:
 	) = 0;
 
 	virtual void OnDisconnect(
-		Direction direction
+		Direction direction,
+		DisconnectFlags flgas
 	) = 0;
 
 private:
