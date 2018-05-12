@@ -16,7 +16,9 @@ enum Error : uint32_t
 	invalidState,
 	priorityAlreadyExists,
 	invalidVersion,
-	invalidParameter
+	invalidParameter,
+	connNotFound,
+	connAlreadyExists
 };
 
 } // end TcpInspection namespace
