@@ -68,8 +68,14 @@ Error CProxies::UnregisterProxy(const IProxy *proxy)
 	return Error::success;
 }
 
-void CProxies::GetProxies(std::map<uint32_t, std::shared_ptr<CProxy>>& proxies)
+void CProxies::GetProxies(std::map<uint32_t, std::shared_ptr<CProxy>>& proxies) const
 {
 	std::shared_lock<std::shared_timed_mutex> _lock(m_mutex);
 	proxies = m_proxies;
+}
+
+uint64_t CProxies::GetProxiesCount() const
+{
+	std::shared_lock<std::shared_timed_mutex> _lock(m_mutex);
+	return m_proxies.size();
 }

@@ -22,11 +22,13 @@ public:
 
 	TcpInspection::Error UnregisterProxy(const TcpInspection::IProxy *proxy);
 
-	void GetProxies(std::map<uint32_t, std::shared_ptr<CProxy>>& proxies);
+	void GetProxies(std::map<uint32_t, std::shared_ptr<CProxy>>& proxies) const;
+
+	uint64_t GetProxiesCount() const;
 
 private:
 	std::map<uint32_t, std::shared_ptr<CProxy>> m_proxies;
-	std::shared_timed_mutex m_mutex;
+	mutable std::shared_timed_mutex m_mutex;
 };
 
 #endif
