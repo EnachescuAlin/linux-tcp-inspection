@@ -77,6 +77,13 @@ void ReleaseInterface(void *interface)
 		ref = --g_interfaceRef;
 		if (g_interfaceRef == 0) {
 			LOG_INFO("interface ref is 0 => destroy CTcpInspection object");
+
+			uint64_t proxiesNum = g_interface->GetProxiesCount();
+			if (proxiesNum != 0) {
+				LOG_ERROR("destroying CTcpInspection object but proxies num is %lu",
+					proxiesNum);
+			}
+
 			delete g_interface;
 			g_interface = nullptr;
 		}
