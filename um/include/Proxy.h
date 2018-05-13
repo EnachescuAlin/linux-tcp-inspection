@@ -12,6 +12,7 @@
 #include <map>
 #include <mutex>
 #include <atomic>
+#include <shared_mutex>
 
 class CConnectionMgr;
 
@@ -24,7 +25,7 @@ public:
 
 	~CProxy() = default;
 
-	void Unregister();
+	void Unregister(std::shared_timed_mutex& mutex);
 
 	bool operator==(const TcpInspection::IProxy *proxy) const
 	{

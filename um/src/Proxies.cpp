@@ -49,20 +49,21 @@ Error CProxies::UnregisterProxy(const IProxy *proxy)
 	}
 
 	std::shared_ptr<CProxy> cproxy;
-	{
-		std::unique_lock<std::shared_timed_mutex> _lock(m_mutex);
 
-		auto it = m_proxies.find(proxy->GetPriority());
-		if (it == m_proxies.end()) {
-			LOG_ERROR("proxy not found");
-			return Error::proxyNotFound;
-		}
+	m_mutex.lock();
 
-		cproxy = it->second;
-		m_proxies.erase(it);
+	auto it = m_proxies.find(proxy->GetPriority());
+	if (it == m_proxies.end()) {
+		m_mutex.unlock();
+		LOG_ERROR("proxy not found");
+		return Error::proxyNotFound;
 	}
 
-	cproxy->Unregister();
+	cproxy = it->second;
+	m_proxies.erase(it);
+
+	// this function unlock the mutex
+	cproxy->Unregister(m_mutex);
 
 	LOG_INFO("proxy unregistered successfully");
 	return Error::success;

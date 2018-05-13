@@ -13,17 +13,25 @@ CProxy::CProxy(IProxy *proxy)
 	m_proxyId = g_currentAvailableProxyId.fetch_add(1, std::memory_order_relaxed);
 }
 
-void CProxy::Unregister()
+void CProxy::Unregister(std::shared_timed_mutex& mutex)
 {
 	m_semaphorePtr.store(&m_semaphore);
 
 	{
 		std::lock_guard<std::mutex> _lock(m_lock);
+
+		if (m_filteredConns.size() == 0) {
+			mutex.unlock();
+			return;
+		}
+
 		for (auto& conn : m_filteredConns) {
 			// TODO
 			// send unregister event
 		}
 	}
+
+	mutex.unlock();
 
 	m_semaphore.wait();
 }
