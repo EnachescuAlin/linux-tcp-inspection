@@ -22,13 +22,53 @@ public:
 
 	TcpInspection::Error UnregisterProxy(const TcpInspection::IProxy *proxy);
 
+	void AcquireProxiesList() const;
+
 	void GetProxies(std::map<uint32_t, std::shared_ptr<CProxy>>& proxies) const;
+
+	void ReleaseProxiesList() const;
 
 	uint64_t GetProxiesCount() const;
 
 private:
 	std::map<uint32_t, std::shared_ptr<CProxy>> m_proxies;
 	mutable std::shared_timed_mutex m_mutex;
+};
+
+class proxies_list_lock_guard
+	: private utils::NonCopyable
+	, private utils::NonMovable
+{
+public:
+	proxies_list_lock_guard(const CProxies& proxies)
+		: m_proxies(&proxies)
+	{
+		m_proxies->AcquireProxiesList();
+	}
+
+	proxies_list_lock_guard(const CProxies *proxies)
+		: m_proxies(proxies)
+	{
+		if (m_proxies != nullptr) {
+			m_proxies->AcquireProxiesList();
+		}
+	}
+
+	~proxies_list_lock_guard()
+	{
+		unlock();
+	}
+
+	void unlock()
+	{
+		if (m_proxies != nullptr) {
+			m_proxies->ReleaseProxiesList();
+			m_proxies = nullptr;
+		}
+	}
+
+private:
+	const CProxies *m_proxies;
 };
 
 #endif

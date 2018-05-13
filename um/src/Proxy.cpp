@@ -1,6 +1,8 @@
 #include "Proxy.h"
 #include "Logging.h"
 
+#include <atomic>
+
 using namespace TcpInspection;
 using namespace utils::sync;
 
@@ -13,25 +15,22 @@ CProxy::CProxy(IProxy *proxy)
 	m_proxyId = g_currentAvailableProxyId.fetch_add(1, std::memory_order_relaxed);
 }
 
-void CProxy::Unregister(std::shared_timed_mutex& mutex)
+void CProxy::Unregister()
 {
-	m_semaphorePtr.store(&m_semaphore);
-
 	{
 		std::lock_guard<std::mutex> _lock(m_lock);
 
 		if (m_filteredConns.size() == 0) {
-			mutex.unlock();
 			return;
 		}
+
+		m_semaphorePtr = &m_semaphore;
 
 		for (auto& conn : m_filteredConns) {
 			// TODO
 			// send unregister event
 		}
 	}
-
-	mutex.unlock();
 
 	m_semaphore.wait();
 }
@@ -72,12 +71,9 @@ Error CProxy::RemoveConnection(
 		return Error::invalidState;
 	}
 
-	if (m_filteredConns.size() == 0) {
-		Semaphore *sem = m_semaphorePtr.load();
-		if (sem != nullptr) {
-			LOG_INFO("[proxy_%u] notify semaphore connId[%lu]", m_proxyId, connId);
-			sem->notify();
-		}
+	if (m_filteredConns.size() == 0 && m_semaphorePtr != nullptr) {
+		LOG_INFO("[proxy_%u] notify semaphore connId[%lu]", m_proxyId, connId);
+		m_semaphorePtr->notify();
 	}
 
 	return Error::success;

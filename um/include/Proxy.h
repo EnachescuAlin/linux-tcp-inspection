@@ -11,8 +11,6 @@
 #include <memory>
 #include <map>
 #include <mutex>
-#include <atomic>
-#include <shared_mutex>
 
 class CConnectionMgr;
 
@@ -25,7 +23,7 @@ public:
 
 	~CProxy() = default;
 
-	void Unregister(std::shared_timed_mutex& mutex);
+	void Unregister();
 
 	bool operator==(const TcpInspection::IProxy *proxy) const
 	{
@@ -59,7 +57,7 @@ private:
 	std::mutex m_lock;
 
 	utils::sync::Semaphore m_semaphore;
-	std::atomic<utils::sync::Semaphore*> m_semaphorePtr;
+	utils::sync::Semaphore* m_semaphorePtr;
 };
 
 #endif
