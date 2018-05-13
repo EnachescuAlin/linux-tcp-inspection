@@ -46,6 +46,11 @@ public:
 		uint64_t connId
 	);
 
+	TcpInspection::ConnectionVerdict OnNewConnectionEvent(
+		TcpInspection::IConnectionMgr *connMgr,
+		TcpInspection::IConnection **conn
+	);
+
 private:
 	TcpInspection::IProxy *m_proxy = nullptr;
 	uint32_t m_proxyId;

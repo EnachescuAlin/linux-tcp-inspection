@@ -82,3 +82,10 @@ Error CProxy::RemoveConnection(
 
 	return Error::success;
 }
+
+ConnectionVerdict CProxy::OnNewConnectionEvent(
+	IConnectionMgr *connMgr,
+	IConnection **conn)
+{
+	return m_proxy->OnNewConnection(connMgr, conn);
+}
